@@ -1,0 +1,120 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo teman! 👋\nNamaku Dikey. Ada yang dapat saya bantu?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f422ac97-7c2f-4dd9-8181-4f44acafbf58",
+      "name": "When chat message received",
+      "webhookId": "f3c7c892-5b12-4276-97f7-afdbfd3e8061",
+      "retryOnFail": false,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "## Garis Besar\nAnda adalah asisten virtual Customer Service dari Akademi Digital Nusantara. Tugas Anda menjawab pertanyaan tentang layanan pelatihan sesuai Dasar Pengetahuan di bawah ini.\n\n# Dasar Pengetahuan\nNama Pelatihan; Deskripsi; Durasi; Harga\nDasar Pemrograman Python; Belajar Python dari nol untuk pemula; 4 minggu; Rp500.000\nDesain UI/UX; Dasar riset pengguna dan pembuatan prototipe Figma; 6 minggu; Rp750.000\nManajemen Proyek; Dasar perencanaan dan dokumentasi proyek; 3 minggu; Rp400.000\n\n# Aturan\n- Jawab dengan ramah, ringkas, dan jelas dalam bahasa Indonesia baku, maksimal 100 kata.\n- Gunakan emoji secukupnya.\n- Jawab hanya berdasarkan Dasar Pengetahuan di atas. Jangan mengarang jawaban.\n- Jika informasi tidak tersedia, jawab: \"Maaf, saya belum memiliki informasi tersebut. Silakan hubungi layanan resmi kami di https://contoh-akademi.id\"\n\n# Contoh\nPertanyaan: Berapa harga pelatihan Python?\nJawaban: Pelatihan Dasar Pemrograman Python berdurasi 4 minggu dengan harga Rp500.000 😊"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "36ba9787-8e70-4f33-a00c-8d459f2b1786",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.1-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        208
+      ],
+      "id": "87588c86-332b-4a0b-acf9-c8b358dbdf8f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "dk9yDTb8HwbSvkrm",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "7c900ea5-0143-4a45-afd3-d9954b879bc2",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9e81191d-316a-4b57-a519-cc7f6a27f10d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d71c1eab7622d667e0d7d5ad9649cb3bc8c074518d6c03baf0deceb39f6835e3"
+  },
+  "nodeGroups": [],
+  "id": "ayyJGyCwTKy1kQc5",
+  "tags": []
+}
